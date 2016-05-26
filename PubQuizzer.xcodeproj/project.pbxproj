@@ -16,6 +16,7 @@
 		903C745E1CE71A3E00013291 /* CreateQuestionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 903C745D1CE71A3E00013291 /* CreateQuestionViewController.swift */; };
 		903C74601CE71BA100013291 /* QuestionTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 903C745F1CE71BA100013291 /* QuestionTableViewController.swift */; };
 		903C74621CE71C2600013291 /* QuestionDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 903C74611CE71C2600013291 /* QuestionDetailViewController.swift */; };
+		A70E894F1CF7357400D273F1 /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = A70E894E1CF7357400D273F1 /* CoreDataStack.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -30,6 +31,7 @@
 		903C745D1CE71A3E00013291 /* CreateQuestionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateQuestionViewController.swift; sourceTree = "<group>"; };
 		903C745F1CE71BA100013291 /* QuestionTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuestionTableViewController.swift; sourceTree = "<group>"; };
 		903C74611CE71C2600013291 /* QuestionDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuestionDetailViewController.swift; sourceTree = "<group>"; };
+		A70E894E1CF7357400D273F1 /* CoreDataStack.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataStack.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -64,6 +66,7 @@
 			children = (
 				903C74551CE70C6800013291 /* Info.plist */,
 				903C74441CE70C6800013291 /* AppDelegate.swift */,
+				A70E894E1CF7357400D273F1 /* CoreDataStack.swift */,
 				903C745D1CE71A3E00013291 /* CreateQuestionViewController.swift */,
 				903C745B1CE7114C00013291 /* CreateQuizViewController.swift */,
 				903C74611CE71C2600013291 /* QuestionDetailViewController.swift */,
@@ -147,6 +150,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A70E894F1CF7357400D273F1 /* CoreDataStack.swift in Sources */,
 				903C745C1CE7114C00013291 /* CreateQuizViewController.swift in Sources */,
 				903C74601CE71BA100013291 /* QuestionTableViewController.swift in Sources */,
 				903C74621CE71C2600013291 /* QuestionDetailViewController.swift in Sources */,
