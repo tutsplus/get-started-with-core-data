@@ -7,8 +7,13 @@
 //
 
 import UIKit
+import CoreData
 
-class QuizTableViewController: UITableViewController {
+class QuizTableViewController: UITableViewController, NSFetchedResultsControllerDelegate {
+    
+    internal var coreDataStack : CoreDataStack?
+
+    let dateFormatter = NSDateFormatter()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -18,29 +23,43 @@ class QuizTableViewController: UITableViewController {
         
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         self.navigationItem.leftBarButtonItem = self.editButtonItem()
+
+        dateFormatter.dateStyle = .ShortStyle
+        dateFormatter.timeStyle = .NoStyle
+    }
+
+    override func viewWillAppear(animated: Bool) {
+        self.initializeFetchedResultsController()
     }
     
     // MARK: - Table view data source
     
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
-        return 0
+        return fetchedResultsController.sections!.count
     }
     
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
-        return 0
+        let sections = fetchedResultsController.sections! as [NSFetchedResultsSectionInfo]
+        let sectionInfo = sections[section]
+        return sectionInfo.numberOfObjects
     }
-    
-    /*
-     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-         let cell = tableView.dequeueReusableCellWithIdentifier("reuseIdentifier", forIndexPath: indexPath)
+
+    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCellWithIdentifier("reuseIdentifier", forIndexPath: indexPath)
          
-         // Configure the cell...
+        configureCell(cell, indexPath: indexPath)
          
-         return cell
-     }
-     */
+        return cell
+    }
+
+    func configureCell(cell: UITableViewCell, indexPath: NSIndexPath) {
+        let quiz = fetchedResultsController.objectAtIndexPath(indexPath) as! Quiz
+
+        cell.textLabel!.text = quiz.name
+        if let date = quiz.date {
+            cell.detailTextLabel!.text = dateFormatter.stringFromDate(date)
+        }
+    }
     
      // Override to support conditional editing of the table view.
      override func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
@@ -85,5 +104,70 @@ class QuizTableViewController: UITableViewController {
      }
      */
 
+    // MARK: - Core Data Integration
+    
+    var fetchedResultsController : NSFetchedResultsController!
+    func initializeFetchedResultsController() {
+        let request = NSFetchRequest(entityName: "Quiz")
+        let sortDescriptor = NSSortDescriptor(key: "date", ascending: false)
+        request.sortDescriptors = [sortDescriptor]
+        fetchedResultsController = NSFetchedResultsController(fetchRequest: request, managedObjectContext: coreDataStack!.mainQueueContext, sectionNameKeyPath: nil, cacheName: "quizCache")
+        fetchedResultsController.delegate = self
+
+        do {
+            try fetchedResultsController.performFetch()
+        } catch {
+            fatalError("Failed to initialize fetched results controller: \(error)")
+        }
+    }
+
+    func controllerWillChangeContent(controller: NSFetchedResultsController) {
+        self.tableView.beginUpdates()
+    }
+
+    func controller(controller: NSFetchedResultsController, didChangeObject anObject: AnyObject, atIndexPath indexPath: NSIndexPath?, forChangeType type: NSFetchedResultsChangeType, newIndexPath: NSIndexPath?) {
+        switch type {
+        case .Insert:
+            tableView.insertRowsAtIndexPaths([newIndexPath!], withRowAnimation: .Fade)
+        case .Delete:
+            tableView.deleteRowsAtIndexPaths([indexPath!], withRowAnimation: .Fade)
+        case .Update:
+            configureCell(tableView.cellForRowAtIndexPath(indexPath!)!, indexPath: indexPath!)
+        case .Move:
+            tableView.deleteRowsAtIndexPaths([indexPath!], withRowAnimation: .Fade)
+            tableView.insertRowsAtIndexPaths([newIndexPath!], withRowAnimation: .Fade)
+        }
+    }
+
+    func controllerDidChangeContent(controller: NSFetchedResultsController) {
+        self.tableView.endUpdates()
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

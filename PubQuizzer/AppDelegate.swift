@@ -14,12 +14,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     // Application-wide temporary storage of showing the answer
     internal var shouldShowAnswer = false
     
+    internal var coreDataStack : CoreDataStack?
+    
     var window: UIWindow?
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
         let navigationController = self.window!.rootViewController as! UINavigationController
         let controller = navigationController.topViewController as! QuizTableViewController
+        
+        self.coreDataStack = CoreDataStack.createSQLiteStack()
+        controller.coreDataStack = coreDataStack
         
         return true
     }
