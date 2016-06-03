@@ -123,6 +123,11 @@ class QuizTableViewController: UITableViewController, NSFetchedResultsController
             let createController = controller as! CreateQuizViewController
             createController.quiz = sender as? Quiz
         }
+
+        if (segue.identifier == "ShowQuestionsSegue") {
+            let showController = controller as! QuestionTableViewController
+            showController.quiz = fetchedResultsController.objectAtIndexPath(tableView.indexPathForSelectedRow!) as? Quiz
+        }
      }
 
     // MARK: - Core Data Integration

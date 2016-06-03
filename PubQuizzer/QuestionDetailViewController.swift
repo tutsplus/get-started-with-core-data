@@ -10,6 +10,9 @@ import UIKit
 
 class QuestionDetailViewController: UIViewController {
 
+    internal var quiz : Quiz?
+    internal var question : Question?
+
     @IBOutlet var questionView : UITextView!
     @IBOutlet var answerView : UITextView!
     @IBOutlet var toggleAnswerButton : UIBarButtonItem!
@@ -18,7 +21,11 @@ class QuestionDetailViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
+        navigationItem.title = "Question #\(quiz!.questions!.indexOfObject(question!) + 1)"
+        questionView.text = question?.question
+        answerView.text = question?.answer
+
         if let appDelegate = UIApplication.sharedApplication().delegate as? AppDelegate {
             shouldShowAnswer = appDelegate.shouldShowAnswer
         }
@@ -32,7 +39,7 @@ class QuestionDetailViewController: UIViewController {
     
     func setAnswerDisplay(shouldShow: Bool, sync: Bool = true) {
         shouldShowAnswer = shouldShow
-        
+
         if sync {
             if let appDelegate = UIApplication.sharedApplication().delegate as? AppDelegate {
                 appDelegate.shouldShowAnswer = shouldShowAnswer

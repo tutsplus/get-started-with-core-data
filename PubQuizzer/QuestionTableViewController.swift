@@ -7,40 +7,55 @@
 //
 
 import UIKit
+import CoreData
 
-class QuestionTableViewController: UITableViewController {
+class QuestionTableViewController: UITableViewController, NSFetchedResultsControllerDelegate, CoreDataStackable {
+
+    internal var coreDataStack : CoreDataStack?
+    internal var quiz : Quiz?
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-         // Uncomment the following line to preserve selection between presentations
-         self.clearsSelectionOnViewWillAppear = false
+        self.navigationItem.title = quiz?.name
 
-         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-         self.navigationItem.leftBarButtonItem = self.editButtonItem()
+        self.clearsSelectionOnViewWillAppear = false
+
+        self.toolbarItems = [self.editButtonItem()]
+        self.navigationController?.toolbarHidden = false
+
+        self.tableView.allowsSelectionDuringEditing = true
+    }
+
+    override func viewWillAppear(animated: Bool) {
+        initializeFetchedResultsController()
     }
 
     // MARK: - Table view data source
 
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
-        return 0
+        return fetchedResultsController.sections!.count
     }
 
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
-        return 0
+        let sections = fetchedResultsController.sections! as [NSFetchedResultsSectionInfo]
+        let sectionInfo = sections[section]
+        return sectionInfo.numberOfObjects
     }
 
-    /*
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("reuseIdentifier", forIndexPath: indexPath)
+        let cell = tableView.dequeueReusableCellWithIdentifier("QuestionCell", forIndexPath: indexPath)
 
-        // Configure the cell...
+        configureCell(cell, indexPath: indexPath)
 
         return cell
     }
-    */
+
+    func configureCell(cell: UITableViewCell, indexPath: NSIndexPath) {
+        let question = fetchedResultsController.objectAtIndexPath(indexPath) as! Question
+
+        cell.textLabel!.text = question.question
+    }
 
     // Override to support conditional editing of the table view.
     override func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
@@ -48,39 +63,89 @@ class QuestionTableViewController: UITableViewController {
         return true
     }
 
-    /*
-    // Override to support editing the table view.
-    override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
-        if editingStyle == .Delete {
-            // Delete the row from the data source
-            tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
-        } else if editingStyle == .Insert {
-            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-        }    
-    }
-    */
-
-    /*
-    // Override to support rearranging the table view.
-    override func tableView(tableView: UITableView, moveRowAtIndexPath fromIndexPath: NSIndexPath, toIndexPath: NSIndexPath) {
-
-    }
-    */
-
-    // Override to support conditional rearranging of the table view.
     override func tableView(tableView: UITableView, canMoveRowAtIndexPath indexPath: NSIndexPath) -> Bool {
-        // Return false if you do not want the item to be re-orderable.
         return true
     }
 
-    /*
+    override func tableView(tableView: UITableView, moveRowAtIndexPath fromIndexPath: NSIndexPath, toIndexPath: NSIndexPath) {
+        var questions = fetchedResultsController.fetchedObjects!
+
+        let question = questions.removeAtIndex(fromIndexPath.row)
+        questions.insert(question, atIndex: toIndexPath.row)
+
+        quiz?.questions = NSOrderedSet(array: questions as! [Question])
+
+        let moc = coreDataStack!.mainQueueContext
+        moc.performBlock {
+            try! moc.save()
+        }
+    }
+
+    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        if tableView.editing {
+            performSegueWithIdentifier("CreateQuestionSegue", sender: fetchedResultsController.objectAtIndexPath(indexPath))
+        }
+    }
+
     // MARK: - Navigation
+
+    override func shouldPerformSegueWithIdentifier(identifier: String, sender: AnyObject?) -> Bool {
+        return !(identifier == "QuestionDetailSegue" && tableView.editing)
+    }
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
+        if segue.identifier == "QuestionDetailSegue" {
+            let controller = segue.destinationViewController as! QuestionDetailViewController
+            controller.question = quiz!.questions!.objectAtIndex(tableView.indexPathForSelectedRow!.row) as? Question
+            controller.quiz = self.quiz
+        } else if segue.identifier == "CreateQuestionSegue" {
+            let controller = (segue.destinationViewController as! UINavigationController).topViewController as! CreateQuestionViewController
+            controller.coreDataStack = self.coreDataStack
+            controller.quiz = self.quiz
 
+            if tableView.editing {
+                controller.question = quiz!.questions!.objectAtIndex(tableView.indexPathForSelectedRow!.row) as? Question
+            }
+        }
+    }
+
+    // MARK: - Core Data Integration
+
+    var fetchedResultsController : NSFetchedResultsController!
+    func initializeFetchedResultsController() {
+        let request = NSFetchRequest(entityName: "Question")
+        request.sortDescriptors = [NSSortDescriptor(key: "quiz", ascending: true)]
+        request.predicate = NSPredicate(format: "quiz == %@", quiz!)
+        fetchedResultsController = NSFetchedResultsController(fetchRequest: request, managedObjectContext: coreDataStack!.mainQueueContext, sectionNameKeyPath: nil, cacheName: nil)
+        fetchedResultsController.delegate = self
+
+        do {
+            try fetchedResultsController.performFetch()
+        } catch {
+            fatalError("Failed to initialize fetched results controller: \(error)")
+        }
+    }
+
+    func controllerWillChangeContent(controller: NSFetchedResultsController) {
+        self.tableView.beginUpdates()
+    }
+
+    func controller(controller: NSFetchedResultsController, didChangeObject anObject: AnyObject, atIndexPath indexPath: NSIndexPath?, forChangeType type: NSFetchedResultsChangeType, newIndexPath: NSIndexPath?) {
+        switch type {
+        case .Insert:
+            tableView.insertRowsAtIndexPaths([newIndexPath!], withRowAnimation: .Fade)
+        case .Delete:
+            tableView.deleteRowsAtIndexPaths([indexPath!], withRowAnimation: .Fade)
+        case .Update:
+            configureCell(tableView.cellForRowAtIndexPath(indexPath!)!, indexPath: indexPath!)
+        case .Move:
+            tableView.deleteRowsAtIndexPaths([indexPath!], withRowAnimation: .Fade)
+            tableView.insertRowsAtIndexPaths([newIndexPath!], withRowAnimation: .Fade)
+        }
+    }
+
+    func controllerDidChangeContent(controller: NSFetchedResultsController) {
+        self.tableView.endUpdates()
+    }
 }

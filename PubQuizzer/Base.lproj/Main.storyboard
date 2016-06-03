@@ -281,7 +281,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="QuestionCell" editingAccessoryType="disclosureIndicator" textLabel="g2S-4r-VHX" style="IBUITableViewCellStyleDefault" id="Dks-IZ-fmF">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="QuestionCell" textLabel="g2S-4r-VHX" style="IBUITableViewCellStyleDefault" id="Dks-IZ-fmF">
                                 <rect key="frame" x="0.0" y="92" width="600" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Dks-IZ-fmF" id="mQR-qD-CTo">
@@ -298,7 +298,7 @@
                                     </subviews>
                                 </tableViewCellContentView>
                                 <connections>
-                                    <segue destination="IrI-MW-WN5" kind="show" id="NN4-Fj-gI0"/>
+                                    <segue destination="IrI-MW-WN5" kind="show" identifier="QuestionDetailSegue" id="NN4-Fj-gI0"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>
@@ -311,7 +311,7 @@
                     <navigationItem key="navigationItem" title="Quiz Name" id="soH-Ir-qM5">
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="2BC-ZZ-duP">
                             <connections>
-                                <segue destination="yuO-BZ-GTm" kind="presentation" id="klX-tE-nui"/>
+                                <segue destination="yuO-BZ-GTm" kind="presentation" identifier="CreateQuestionSegue" id="klX-tE-nui"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -394,7 +394,11 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Quiz Name – Question #" id="A72-1O-X6N">
-                        <barButtonItem key="rightBarButtonItem" title="Show Answer" id="Pn8-5h-2Qm"/>
+                        <barButtonItem key="rightBarButtonItem" title="Show Answer" id="Pn8-5h-2Qm">
+                            <connections>
+                                <action selector="toggleAnswer:" destination="IrI-MW-WN5" id="roL-7E-SRf"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
                     <connections>
                         <outlet property="answerView" destination="xzn-9a-ajT" id="ABa-xg-jZ4"/>
