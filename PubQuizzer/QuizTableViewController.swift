@@ -26,6 +26,8 @@ class QuizTableViewController: UITableViewController, NSFetchedResultsController
 
         dateFormatter.dateStyle = .ShortStyle
         dateFormatter.timeStyle = .NoStyle
+
+        self.tableView.allowsSelectionDuringEditing = true
     }
 
     override func viewWillAppear(animated: Bool) {
@@ -45,7 +47,7 @@ class QuizTableViewController: UITableViewController, NSFetchedResultsController
     }
 
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("reuseIdentifier", forIndexPath: indexPath)
+        let cell = tableView.dequeueReusableCellWithIdentifier("QuizCell", forIndexPath: indexPath)
          
         configureCell(cell, indexPath: indexPath)
          
@@ -66,18 +68,23 @@ class QuizTableViewController: UITableViewController, NSFetchedResultsController
          // Return false if you do not want the specified item to be editable.
          return true
      }
-    
-    /*
+
+    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        if tableView.editing {
+            performSegueWithIdentifier("CreateQuizSegue", sender: fetchedResultsController.objectAtIndexPath(indexPath))
+        }
+    }
+
      // Override to support editing the table view.
      override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         if editingStyle == .Delete {
-            // Delete the row from the data source
-            tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
-        } else if editingStyle == .Insert {
-            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
+            let moc = coreDataStack!.mainQueueContext
+            moc.performBlock {
+                moc.deleteObject(self.fetchedResultsController.objectAtIndexPath(indexPath) as! NSManagedObject)
+                try! moc.save()
+            }
         }
      }
-     */
     
     /*
      // Override to support rearranging the table view.
@@ -93,21 +100,37 @@ class QuizTableViewController: UITableViewController, NSFetchedResultsController
         return true
      }
      */
-    
-    /*
+
      // MARK: - Navigation
+
+    override func shouldPerformSegueWithIdentifier(identifier: String, sender: AnyObject?) -> Bool {
+        return !(identifier == "ShowQuestionsSegue" && tableView.editing)
+    }
      
      // In a storyboard-based application, you will often want to do a little preparation before navigation
      override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-         // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+        var controller : CoreDataStackable
+
+        if (segue.destinationViewController is UINavigationController) {
+            controller = (segue.destinationViewController as! UINavigationController).topViewController as! CoreDataStackable
+        } else {
+            controller = segue.destinationViewController as! CoreDataStackable
+        }
+
+        controller.coreDataStack = self.coreDataStack
+
+        if (segue.identifier == "CreateQuizSegue" && tableView.editing && sender is Quiz) {
+            let createController = controller as! CreateQuizViewController
+            createController.quiz = sender as? Quiz
+        }
      }
-     */
 
     // MARK: - Core Data Integration
     
     var fetchedResultsController : NSFetchedResultsController!
     func initializeFetchedResultsController() {
+        NSFetchedResultsController.deleteCacheWithName("quizCache")
+
         let request = NSFetchRequest(entityName: "Quiz")
         let sortDescriptor = NSSortDescriptor(key: "date", ascending: false)
         request.sortDescriptors = [sortDescriptor]

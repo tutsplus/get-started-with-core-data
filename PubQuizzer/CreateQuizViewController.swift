@@ -7,17 +7,28 @@
 //
 
 import UIKit
+import CoreData
 
-class CreateQuizViewController: UIViewController {
+class CreateQuizViewController: UIViewController, CoreDataStackable {
     @IBOutlet var nameField : UITextField!
     @IBOutlet var dateField : UITextField!
     var dateValue = NSDate ()
     let dateFormatter = NSDateFormatter()
     
     @IBOutlet var datePicker : UIDatePicker!
+
+    internal var coreDataStack : CoreDataStack?
+    internal var quiz : Quiz?
     
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        if let q = quiz {
+            nameField.text = q.name
+            if let d = q.date {
+                dateValue = d
+            }
+        }
         
         dateFormatter.dateStyle = .LongStyle
         dateFormatter.timeStyle = .NoStyle
@@ -29,7 +40,23 @@ class CreateQuizViewController: UIViewController {
     }
     
     @IBAction func saveQuiz(sender: AnyObject) {
-        // TODO: Save Quiz with Core Data
+        let moc = coreDataStack!.mainQueueContext
+
+        if self.quiz == nil {
+            moc.performBlockAndWait {
+                let description = NSEntityDescription.entityForName("Quiz", inManagedObjectContext: moc)
+                self.quiz = Quiz(entity: description!, insertIntoManagedObjectContext: moc)
+            }
+        }
+
+        quiz!.name = self.nameField.text!
+        quiz!.date = self.dateValue
+
+        moc.performBlock {
+            try! moc.save()
+        }
+
+        dismissModal(self)
     }
     
     @IBAction func dismissModal(sender: AnyObject) {

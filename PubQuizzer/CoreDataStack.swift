@@ -9,6 +9,10 @@
 import Foundation
 import CoreData
 
+protocol CoreDataStackable : class {
+    var coreDataStack : CoreDataStack? { get set }
+}
+
 public final class CoreDataStack {
     public private(set) lazy var persistingQueueContext : NSManagedObjectContext = {
         return self.setupPersistingQueueContext()
@@ -27,6 +31,11 @@ public final class CoreDataStack {
         let setup : () -> Void = {
             managedObjectContext = NSManagedObjectContext(concurrencyType: .MainQueueConcurrencyType)
             managedObjectContext.parentContext = self.persistingQueueContext
+
+            NSNotificationCenter.defaultCenter().addObserver(self,
+                                                             selector: #selector(CoreDataStack.stackDidSaveNotification(_:)),
+                                                             name: NSManagedObjectContextDidSaveNotification,
+                                                             object: managedObjectContext)
         }
         
         if !NSThread.isMainThread() {
@@ -86,6 +95,34 @@ public final class CoreDataStack {
         self.storeType = storeType
         self.persistentStoreCoordinator = persistentStoreCoordinator
         persistingQueueContext.persistentStoreCoordinator = persistentStoreCoordinator
+    }
+
+    deinit {
+        NSNotificationCenter.defaultCenter().removeObserver(self)
+    }
+
+    private let saveDispatchGroup = dispatch_group_create()
+}
+
+private extension CoreDataStack {
+    @objc private func stackDidSaveNotification(notification: NSNotification) {
+        guard let notificationContext = notification.object as? NSManagedObjectContext else {
+            fatalError("Notification object wasn't a managed object context")
+        }
+
+        guard let parentContext = notificationContext.parentContext where parentContext.hasChanges else {
+            return
+        }
+
+        dispatch_group_enter(saveDispatchGroup)
+        parentContext.performBlock {
+            do {
+                try parentContext.save()
+            } catch {
+                fatalError("Error during save: \(error)")
+            }
+        }
+        dispatch_group_leave(saveDispatchGroup)
     }
 }
 
