@@ -12,6 +12,12 @@ import CoreData
 
 class Quiz: NSManagedObject {
 
-// Insert code here to add functionality to your managed object subclass
+    @NSManaged private var primitiveDate : NSDate
+
+    override func awakeFromInsert() {
+        super.awakeFromInsert()
+
+        primitiveDate = NSDate()
+    }
 
 }

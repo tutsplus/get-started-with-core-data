@@ -63,6 +63,8 @@ public final class CoreDataStack {
     }
     
     public static func createSQLiteStack() -> CoreDataStack {
+        NSValueTransformer.setValueTransformer(ColorTransformer(), forName: "ColorTransformer")
+
         let mom = NSBundle.mainBundle().managedObjectModel()
         let storeURL = NSURL(string: "PubQuizzer.sqlite", relativeToURL: documentsDirectory)
         let coordinator = NSPersistentStoreCoordinator(managedObjectModel: mom)

@@ -22,6 +22,7 @@
 		A70E89581CF73D5000D273F1 /* Quiz.swift in Sources */ = {isa = PBXBuildFile; fileRef = A70E89541CF73D5000D273F1 /* Quiz.swift */; };
 		A70E89591CF73D5000D273F1 /* Question+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = A70E89551CF73D5000D273F1 /* Question+CoreDataProperties.swift */; };
 		A70E895A1CF73D5000D273F1 /* Question.swift in Sources */ = {isa = PBXBuildFile; fileRef = A70E89561CF73D5000D273F1 /* Question.swift */; };
+		A73AEF491D0159DC00B26CB4 /* ColorTransformer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A73AEF481D0159DC00B26CB4 /* ColorTransformer.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -42,6 +43,7 @@
 		A70E89541CF73D5000D273F1 /* Quiz.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Quiz.swift; sourceTree = "<group>"; };
 		A70E89551CF73D5000D273F1 /* Question+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Question+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		A70E89561CF73D5000D273F1 /* Question.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Question.swift; sourceTree = "<group>"; };
+		A73AEF481D0159DC00B26CB4 /* ColorTransformer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorTransformer.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -79,6 +81,7 @@
 				A70E89551CF73D5000D273F1 /* Question+CoreDataProperties.swift */,
 				A70E89561CF73D5000D273F1 /* Question.swift */,
 				A70E89501CF73C4400D273F1 /* PubQuizzer.xcdatamodeld */,
+				A73AEF481D0159DC00B26CB4 /* ColorTransformer.swift */,
 				903C74551CE70C6800013291 /* Info.plist */,
 				903C74441CE70C6800013291 /* AppDelegate.swift */,
 				A70E894E1CF7357400D273F1 /* CoreDataStack.swift */,
@@ -170,6 +173,7 @@
 				903C745C1CE7114C00013291 /* CreateQuizViewController.swift in Sources */,
 				A70E89571CF73D5000D273F1 /* Quiz+CoreDataProperties.swift in Sources */,
 				903C74601CE71BA100013291 /* QuestionTableViewController.swift in Sources */,
+				A73AEF491D0159DC00B26CB4 /* ColorTransformer.swift in Sources */,
 				A70E89591CF73D5000D273F1 /* Question+CoreDataProperties.swift in Sources */,
 				903C74621CE71C2600013291 /* QuestionDetailViewController.swift in Sources */,
 				A70E89581CF73D5000D273F1 /* Quiz.swift in Sources */,
