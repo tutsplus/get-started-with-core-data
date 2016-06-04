@@ -69,7 +69,11 @@ public final class CoreDataStack {
         let storeURL = NSURL(string: "PubQuizzer.sqlite", relativeToURL: documentsDirectory)
         let coordinator = NSPersistentStoreCoordinator(managedObjectModel: mom)
         do {
-            try coordinator.addPersistentStoreWithType(NSSQLiteStoreType, configuration: nil, URL: storeURL, options: nil)
+            let migrationOptions = [
+                NSMigratePersistentStoresAutomaticallyOption : true,
+                NSInferMappingModelAutomaticallyOption : true
+            ]
+            try coordinator.addPersistentStoreWithType(NSSQLiteStoreType, configuration: nil, URL: storeURL, options: migrationOptions)
         } catch {
             fatalError("Couldn't create store at \(storeURL): \(error)")
         }
@@ -156,7 +160,11 @@ public extension CoreDataStack {
             
             let coordinator = NSPersistentStoreCoordinator(managedObjectModel: mom)
             do {
-                try coordinator.addPersistentStoreWithType(NSSQLiteStoreType, configuration: nil, URL: storeURL, options: nil)
+                let migrationOptions = [
+                    NSMigratePersistentStoresAutomaticallyOption : true,
+                    NSInferMappingModelAutomaticallyOption : true
+                ]
+                try coordinator.addPersistentStoreWithType(NSSQLiteStoreType, configuration: nil, URL: storeURL, options: migrationOptions)
             } catch {
                 fatalError("Couldn't re-create store at \(storeURL): \(error)")
             }

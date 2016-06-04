@@ -2,7 +2,7 @@
 //  Question+CoreDataProperties.swift
 //  PubQuizzer
 //
-//  Created by Envato Tuts+ on 26/05/16.
+//  Created by Envato Tuts+ on 04/06/16.
 //  Copyright © 2016 Markus Mühlberger. All rights reserved.
 //
 //  Choose "Create NSManagedObject Subclass…" from the Core Data editor menu
@@ -14,8 +14,9 @@ import CoreData
 
 extension Question {
 
-    @NSManaged var question: String?
     @NSManaged var answer: String?
+    @NSManaged var question: String?
+    @NSManaged var index: NSNumber?
     @NSManaged var quiz: Quiz?
 
 }

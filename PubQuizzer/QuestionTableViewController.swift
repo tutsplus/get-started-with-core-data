@@ -54,7 +54,7 @@ class QuestionTableViewController: UITableViewController, NSFetchedResultsContro
     func configureCell(cell: UITableViewCell, indexPath: NSIndexPath) {
         let question = fetchedResultsController.objectAtIndexPath(indexPath) as! Question
 
-        cell.textLabel!.text = question.question
+        cell.textLabel!.text = "\(Int(question.index!) + 1). \(question.question!)"
     }
 
     // Override to support conditional editing of the table view.
@@ -68,12 +68,14 @@ class QuestionTableViewController: UITableViewController, NSFetchedResultsContro
     }
 
     override func tableView(tableView: UITableView, moveRowAtIndexPath fromIndexPath: NSIndexPath, toIndexPath: NSIndexPath) {
-        var questions = fetchedResultsController.fetchedObjects!
+        var questions = fetchedResultsController.fetchedObjects as! [Question]
 
         let question = questions.removeAtIndex(fromIndexPath.row)
         questions.insert(question, atIndex: toIndexPath.row)
 
-        quiz?.questions = NSOrderedSet(array: questions as! [Question])
+        for question in questions {
+            question.index = questions.indexOf(question)
+        }
 
         let moc = coreDataStack!.mainQueueContext
         moc.performBlock {
@@ -115,7 +117,7 @@ class QuestionTableViewController: UITableViewController, NSFetchedResultsContro
     var fetchedResultsController : NSFetchedResultsController!
     func initializeFetchedResultsController() {
         let request = NSFetchRequest(entityName: "Question")
-        request.sortDescriptors = [NSSortDescriptor(key: "quiz", ascending: true)]
+        request.sortDescriptors = [NSSortDescriptor(key: "index", ascending: true)]
         request.predicate = NSPredicate(format: "quiz == %@", quiz!)
         request.returnsObjectsAsFaults = false
         fetchedResultsController = NSFetchedResultsController(fetchRequest: request, managedObjectContext: coreDataStack!.mainQueueContext, sectionNameKeyPath: nil, cacheName: "\(quiz?.objectID)-QuestionsCache")

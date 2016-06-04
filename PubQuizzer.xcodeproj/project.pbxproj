@@ -23,6 +23,8 @@
 		A70E89591CF73D5000D273F1 /* Question+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = A70E89551CF73D5000D273F1 /* Question+CoreDataProperties.swift */; };
 		A70E895A1CF73D5000D273F1 /* Question.swift in Sources */ = {isa = PBXBuildFile; fileRef = A70E89561CF73D5000D273F1 /* Question.swift */; };
 		A73AEF491D0159DC00B26CB4 /* ColorTransformer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A73AEF481D0159DC00B26CB4 /* ColorTransformer.swift */; };
+		A7A037681D0305BF00058D3D /* QuestionToQuestion2Policy.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7A037671D0305BF00058D3D /* QuestionToQuestion2Policy.swift */; };
+		A7A0376A1D03067A00058D3D /* PubQuizzerToPubQuizzer2.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = A7A037691D03067A00058D3D /* PubQuizzerToPubQuizzer2.xcmappingmodel */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -44,6 +46,9 @@
 		A70E89551CF73D5000D273F1 /* Question+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Question+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		A70E89561CF73D5000D273F1 /* Question.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Question.swift; sourceTree = "<group>"; };
 		A73AEF481D0159DC00B26CB4 /* ColorTransformer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorTransformer.swift; sourceTree = "<group>"; };
+		A7A037661D03050F00058D3D /* PubQuizzer 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "PubQuizzer 2.xcdatamodel"; sourceTree = "<group>"; };
+		A7A037671D0305BF00058D3D /* QuestionToQuestion2Policy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuestionToQuestion2Policy.swift; sourceTree = "<group>"; };
+		A7A037691D03067A00058D3D /* PubQuizzerToPubQuizzer2.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = PubQuizzerToPubQuizzer2.xcmappingmodel; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -85,6 +90,8 @@
 				903C74551CE70C6800013291 /* Info.plist */,
 				903C74441CE70C6800013291 /* AppDelegate.swift */,
 				A70E894E1CF7357400D273F1 /* CoreDataStack.swift */,
+				A7A037691D03067A00058D3D /* PubQuizzerToPubQuizzer2.xcmappingmodel */,
+				A7A037671D0305BF00058D3D /* QuestionToQuestion2Policy.swift */,
 				903C745D1CE71A3E00013291 /* CreateQuestionViewController.swift */,
 				903C745B1CE7114C00013291 /* CreateQuizViewController.swift */,
 				903C74611CE71C2600013291 /* QuestionDetailViewController.swift */,
@@ -179,6 +186,8 @@
 				A70E89581CF73D5000D273F1 /* Quiz.swift in Sources */,
 				903C74451CE70C6800013291 /* AppDelegate.swift in Sources */,
 				A70E895A1CF73D5000D273F1 /* Question.swift in Sources */,
+				A7A0376A1D03067A00058D3D /* PubQuizzerToPubQuizzer2.xcmappingmodel in Sources */,
+				A7A037681D0305BF00058D3D /* QuestionToQuestion2Policy.swift in Sources */,
 				903C744A1CE70C6800013291 /* QuizTableViewController.swift in Sources */,
 				903C745E1CE71A3E00013291 /* CreateQuestionViewController.swift in Sources */,
 			);
@@ -338,9 +347,10 @@
 		A70E89501CF73C4400D273F1 /* PubQuizzer.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
+				A7A037661D03050F00058D3D /* PubQuizzer 2.xcdatamodel */,
 				A70E89511CF73C4400D273F1 /* PubQuizzer.xcdatamodel */,
 			);
-			currentVersion = A70E89511CF73C4400D273F1 /* PubQuizzer.xcdatamodel */;
+			currentVersion = A7A037661D03050F00058D3D /* PubQuizzer 2.xcdatamodel */;
 			path = PubQuizzer.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;
