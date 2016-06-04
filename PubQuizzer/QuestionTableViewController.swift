@@ -117,7 +117,8 @@ class QuestionTableViewController: UITableViewController, NSFetchedResultsContro
         let request = NSFetchRequest(entityName: "Question")
         request.sortDescriptors = [NSSortDescriptor(key: "quiz", ascending: true)]
         request.predicate = NSPredicate(format: "quiz == %@", quiz!)
-        fetchedResultsController = NSFetchedResultsController(fetchRequest: request, managedObjectContext: coreDataStack!.mainQueueContext, sectionNameKeyPath: nil, cacheName: nil)
+        request.returnsObjectsAsFaults = false
+        fetchedResultsController = NSFetchedResultsController(fetchRequest: request, managedObjectContext: coreDataStack!.mainQueueContext, sectionNameKeyPath: nil, cacheName: "\(quiz?.objectID)-QuestionsCache")
         fetchedResultsController.delegate = self
 
         do {

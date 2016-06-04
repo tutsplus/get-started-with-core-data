@@ -139,6 +139,7 @@ class QuizTableViewController: UITableViewController, NSFetchedResultsController
         let request = NSFetchRequest(entityName: "Quiz")
         let sortDescriptor = NSSortDescriptor(key: "date", ascending: false)
         request.sortDescriptors = [sortDescriptor]
+        request.relationshipKeyPathsForPrefetching = ["questions"]
         fetchedResultsController = NSFetchedResultsController(fetchRequest: request, managedObjectContext: coreDataStack!.mainQueueContext, sectionNameKeyPath: nil, cacheName: "quizCache")
         fetchedResultsController.delegate = self
 
